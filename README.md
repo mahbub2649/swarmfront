@@ -33,8 +33,20 @@ It starts on the cinematic camera and matches loop forever. Needs Windows 10/11 
 
 - **The arena.** Two bases 2 km apart. Each side has 20 drones and 20 buildings. You win by destroying all of the enemy's buildings, or by having more standing when the 5 minute clock runs out.
 - **The pilots.** Every drone is flown by a neural network trained with PPO. No autopilot, no scripted flying, no waypoints handed to it. It decides 50 times a second and flies the terminal dive itself. The flight model has lift, drag, stall, motor lag and wind.
-- **The commanders.** Every 2 seconds the commander looks at the whole battlefield and gives each drone a job: attack a building, intercept an enemy drone, or defend. Blue's commander is a network trained by self-play. Red's is a rule-based one I wrote by hand.
+- **The commanders.** Every couple of seconds the commander looks at the whole battlefield and gives each drone a job: attack a building, intercept an enemy drone, or defend. Blue's commander is a network trained by self-play. Red's is a rule-based one I wrote by hand (more on it below).
 - **The tactical map** (bottom right) shows every drone, where it's heading and the target its commander assigned. The lines pulse when a drone is in its final dive.
+
+## What the AI is up against
+
+Both sides have the same 20 drones, the same 20 buildings and the exact same pilot network flying every drone. The only difference is who gives the orders.
+
+Red's commander is a rule-based one I wrote by hand. It's simple but it's not dumb. It plays a classic "keep a home guard, send everyone else" strategy:
+
+- **5 defenders.** The first 5 drones only defend. When enemy drones get within 1 km of the base, each defender takes the closest one that nobody else is already chasing. If nothing is coming they patrol over the base.
+- **15 attackers.** The rest spread out over the enemy buildings that are still standing, one building each, so they don't all pile onto the same target. A drone keeps its target until it's destroyed, then moves to the next standing building.
+- **Same rules as the AI.** It can only see enemy drones that are on radar (within 1.5 km of its base or of any of its own drones), same as the AI commander. It actually re-decides every 1 second, the AI only every 2.
+
+What it never does is change the 5/15 split, gang up on one building, chase enemy drones out in the open, or react to how the match is going. The AI commander has no fixed roles at all. Any drone can attack, intercept or defend at any moment, and it figured out by itself how to use that. Over 32 matches that worked out better than my rules.
 
 ## Does the AI actually win?
 
