@@ -81,7 +81,3 @@ Unity 6 (URP) · ML-Agents 4 · Unity Inference Engine · PyTorch · one RTX 306
 Resources and economy, more unit types, bigger and real-world maps, and a variable number of units per side. The commander was designed to scale to that from the start.
 
 If you work on game AI, simulation or RL and want to talk, reach out.
-
----
-
-The training code and Unity project are private for now. This repo has the playable build, the demo video and the training charts. Charts are made from the actual TensorBoard logs with [`tools/make_charts.py`](tools/make_charts.py).
